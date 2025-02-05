@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:00:14 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 02:05:20 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 14:42:52 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@
 # include <stdlib.h>
 # include <string.h>
 # include <stdio.h>
+# include <errno.h>
 
 typedef struct s_data
 {
 	char	***cmds;
 	char	**envp;
+	char	*errors;
 	int		*pids;
 	int		*pipe;
 	int		child;
@@ -40,6 +42,8 @@ typedef struct s_data
 }	t_data;
 
 // Data initialization
+void	argv_parsing(t_data *data, int argc, char **argv);
+void	envp_parsing(t_data *data);
 t_data	data_init(int argc, char **argv, char **envp);
 
 // String utilities
@@ -54,7 +58,7 @@ int		free_strs(char *s1, char *s2, char *s3);
 char	**free_split(char **s);
 void	free_cmds(char ***s);
 void	free_data(t_data *data);
-void	exit_error(t_data *data, const char *msg1, const char *msg2);
+void	exit_error(t_data *data, char *msg1, char *msg2, int nl);
 
 // get_next_line
 char	*get_next_line(int fd, int *error);

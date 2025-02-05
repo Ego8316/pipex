@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:28:58 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 01:55:16 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 14:42:38 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**free_split(char **s)
 	int	i;
 
 	i = 0;
-	while (s[i])
+	while (s && s[i])
 	{
 		free(s[i]);
 		i++;
@@ -43,7 +43,7 @@ void	free_cmds(char ***s)
 	int	i;
 
 	i = 0;
-	while (s[i])
+	while (s && s[i])
 	{
 		free_split(s[i]);
 		i++;
@@ -57,6 +57,8 @@ void	free_data(t_data *data)
 {
 	if (data->cmds)
 		free_cmds(data->cmds);
+	if (data->errors)
+		free(data->errors);
 	if (data->pids)
 		free(data->pids);
 	if (data->pipe)
@@ -64,13 +66,15 @@ void	free_data(t_data *data)
 	return ;
 }
 
-void	exit_error(t_data *data, const char *msg1, const char *msg2)
+void	exit_error(t_data *data, char *msg1, char *msg2, int nl)
 {
-	free_data(data);
 	if (msg1)
 		ft_putstr_error(msg1);
 	if (msg2)
 		ft_putstr_error(msg2);
+	if (nl)
+		ft_putstr_error("\n");
+	free_data(data);
 	exit(1);
 	return ;
 }

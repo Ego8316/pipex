@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/15 12:42:34 by hcavet            #+#    #+#              #
-#    Updated: 2025/02/04 20:24:18 by ego              ###   ########.fr        #
+#    Updated: 2025/02/05 13:24:21 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC		=	pipex.c			\
 			data.c			\
 			display.c		\
 			utils.c			\
+			parsing.c		\
 			get_next_line.c
 SRCS	=	$(addprefix $(SDIR), $(SRC))
 OBJS	=	$(SRCS:.c=.o)

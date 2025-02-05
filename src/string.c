@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 23:09:41 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 01:42:16 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 14:38:07 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,13 @@ char	*join_strs(char *s1, char *s2, char *s3)
 	if (!join)
 		return (NULL);
 	i = -1;
-	while (++i < len1)
+	while (++i < len1 && s1)
 		join[i] = s1[i];
 	i = -1;
-	while (++i < len2)
+	while (++i < len2 && s2)
 		join[i + len1] = s2[i];
 	i = -1;
-	while (++i < len3)
+	while (++i < len3 && s3)
 		join[i + len1 + len2] = s3[i];
 	join[i + len1 + len2] = 0;
 	return (join);
