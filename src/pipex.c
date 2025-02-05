@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:07:21 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 01:40:52 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 02:14:19 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	data = data_parsing(argc, argv, envp);
+	data = data_init(argc, argv, envp);
 	print_cmds(data.cmds);
 	free_data(&data);
 	return (0);
