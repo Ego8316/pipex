@@ -1,0 +1,8 @@
+src/*.o
+a.out
+test
+test.c
+pipex
+out
+outfile
+infile
