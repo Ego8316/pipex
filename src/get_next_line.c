@@ -6,21 +6,11 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 21:50:10 by ego               #+#    #+#             */
-/*   Updated: 2025/02/04 19:47:27 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 18:23:08 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	ft_free(char **s)
-{
-	if (s && *s)
-	{
-		free(*s);
-		*s = NULL;
-	}
-	return (1);
-}
 
 static char	*ft_strndup(const char *s, size_t n, int *error)
 {
@@ -96,6 +86,12 @@ static char	*ft_split_content(char **stash, int *error)
 	return (line);
 }
 
+/*	get_next_line
+*	Finds the next line given a file descriptor.
+*	Allocation error is stocked in error.
+*	If no error pointer is given, frees the stash.
+*	Returns: the next line.
+*/
 char	*get_next_line(int fd, int *error)
 {
 	static char	*stash[FD_MAX];
@@ -107,14 +103,14 @@ char	*get_next_line(int fd, int *error)
 		return (NULL);
 	}
 	line = NULL;
-	if (ft_get_to_next_nl(fd, &stash[fd], error) == 0)
+	if (error && ft_get_to_next_nl(fd, &stash[fd], error) == 0)
 	{
 		ft_free(&stash[fd]);
 		return (NULL);
 	}
-	if (stash[fd] && *stash[fd])
+	if (error && stash[fd] && *stash[fd])
 		line = ft_split_content(&stash[fd], error);
-	if (!line || !(*line))
+	if (!line || !(*line) || *error || !error)
 	{
 		ft_free(&stash[fd]);
 		ft_free(&line);

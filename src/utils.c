@@ -6,21 +6,20 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:28:58 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 14:42:38 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 19:36:50 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	free_strs(char *s1, char *s2, char *s3)
+int	ft_free(char **s)
 {
-	if (s1)
-		free(s1);
-	if (s2)
-		free(s2);
-	if (s3)
-		free(s3);
-	return (0);
+	if (s && *s)
+	{
+		free(*s);
+		*s = NULL;
+	}
+	return (1);
 }
 
 char	**free_split(char **s)
@@ -63,17 +62,25 @@ void	free_data(t_data *data)
 		free(data->pids);
 	if (data->pipe)
 		free(data->pipe);
+	if (data->fd_in >= 0)
+		close(data->fd_in);
+	if (data->fd_out >= 0)
+		close(data->fd_out);
+	if (data->fd_stdin >= 0)
+		close(data->fd_stdin);
+	if (data->here_doc == 1)
+		unlink(TMP);
 	return ;
 }
 
 void	exit_error(t_data *data, char *msg1, char *msg2, int nl)
 {
 	if (msg1)
-		ft_putstr_error(msg1);
+		ft_putstr_fd(msg1, 2);
 	if (msg2)
-		ft_putstr_error(msg2);
+		ft_putstr_fd(msg2, 2);
 	if (nl)
-		ft_putstr_error("\n");
+		ft_putchar_fd('\n', 2);
 	free_data(data);
 	exit(1);
 	return ;

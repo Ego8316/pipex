@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:48:40 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 14:43:44 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 19:44:21 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,51 @@ static t_data	data_new(void)
 	data.here_doc = 0;
 	data.fd_in = -1;
 	data.fd_out = -1;
+	data.fd_stdin = -1;
 	return (data);
 }
+
+/*	read_here_doc
+*	Reads from the standard input and writes in the
+*	.tmp file until limiter is found. If EOF is reached
+*	before finding limiter, prints bash warning. get_next_line
+*	is called afterwards with NULL pointer to empty the stash.
+*/
+void	read_here_doc(t_data *data, char *limiter)
+{
+	int		error;
+	int		eof;
+	char	*line;
+
+	error = 0;
+	eof = 0;
+	data->fd_stdin = dup(STDIN_FILENO);
+	while (!eof)
+	{
+		ft_putstr_fd("> ", STDOUT_FILENO);
+		line = get_next_line(data->fd_stdin, &error);
+		if (error)
+			exit_error(data, "malloc: ", strerror(errno), 1);
+		if (!line)
+			eof = put_bash_warning(limiter);
+		else if (!ft_strncmp(line, limiter, ft_strlen(limiter))
+			&& ft_strlen(limiter) + 1 == ft_strlen(line))
+			eof = 1;
+		else
+			ft_putstr_fd(line, data->fd_in);
+		ft_free(&line);
+	}
+	get_next_line(data->fd_stdin, 0);
+	close(data->fd_stdin);
+	return ;
+}
+
+/*	get_infile
+*	If here_doc present: infile actually is the limiter.
+*	Creates a temporary file and calls read_here_doc
+*	to fill the file like a regular one.
+*	Otherwise, tries to open infile.
+*/
 
 void	get_infile(t_data *data, char *infile)
 {
@@ -38,9 +81,10 @@ void	get_infile(t_data *data, char *infile)
 
 	if (data->here_doc)
 	{
-		data->fd_in = open(TMP, O_RDONLY);
+		data->fd_in = open(TMP, O_RDWR | O_CREAT | O_TRUNC, 0644);
 		if (data->fd_in == -1)
 			exit_error(data, "open: unexpected error", 0, 1);
+		read_here_doc(data, infile);
 	}
 	else
 	{
@@ -57,12 +101,21 @@ void	get_infile(t_data *data, char *infile)
 			data->errors = tmp;
 		}
 	}
+	return ;
 }
 
-void	get_here_doc(t_data *data, char *limiter)
+/*	get_outfile
+*	If here_doc is present, opens outfile in append mode,
+*	truncate mode otherwise.
+*/
+void	get_outfile(t_data *data, char *outfile)
 {
-	limiter[0] = 'a';
-	data->here_doc = 1;
+	if (data->here_doc)
+		data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (data->fd_out == -1)
+		exit_error(data, "open: unexpected error", 0, 1);
 }
 
 /*	data_init
@@ -81,11 +134,8 @@ t_data	data_init(int argc, char **argv, char **envp)
 
 	data = data_new();
 	if (!ft_strncmp(argv[1], "here_doc", 9))
-	{
 		data.here_doc = 1;
-		get_here_doc(&data, argv[2]);
-	}
-	get_infile(&data, argv[1]);
+	get_infile(&data, argv[data.here_doc + 1]);
 	argv_parsing(&data, argc, argv);
 	data.envp = envp;
 	envp_parsing(&data);
@@ -100,6 +150,7 @@ t_data	data_init(int argc, char **argv, char **envp)
 			exit_error(&data, "pipe: ", strerror(errno), 1);
 		i++;
 	}
+	get_outfile(&data, argv[argc - 1]);
 	if (data.errors)
 		exit_error(&data, data.errors, 0, 0);
 	return (data);

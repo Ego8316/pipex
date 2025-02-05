@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:00:14 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 14:42:52 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 19:36:18 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_data
 	int		here_doc;
 	int		fd_in;
 	int		fd_out;
+	int		fd_stdin;
 }	t_data;
 
 // Data initialization
@@ -54,7 +55,7 @@ char	**ft_split(const char *s, char c);
 int		ft_strlen(const char *s);
 
 // Utils
-int		free_strs(char *s1, char *s2, char *s3);
+int		ft_free(char **s);
 char	**free_split(char **s);
 void	free_cmds(char ***s);
 void	free_data(t_data *data);
@@ -67,7 +68,9 @@ char	*ft_strjoin(const char *s1, const char *s2, int *error);
 void	*ft_calloc(size_t nmemb, size_t size, int *error);
 
 // Display
-void	ft_putstr(const char *s);
-void	ft_putstr_error(const char *s);
+void	ft_putchar_fd(char c, int fd);
+void	ft_putstr_fd(const char *s, int fd);
+void	ft_putnbr_fd(int n, int fd);
+int		put_bash_warning(const char *limiter);
 
 #endif
