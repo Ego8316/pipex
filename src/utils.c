@@ -6,12 +6,16 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:28:58 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 19:36:50 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 20:05:21 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*	ft_free
+*	Frees a char pointer only if allocated,
+*	and set it to NULL afterwards.
+*/
 int	ft_free(char **s)
 {
 	if (s && *s)
@@ -22,6 +26,9 @@ int	ft_free(char **s)
 	return (1);
 }
 
+/*	free_split
+*	Entirely frees a double char pointer.
+*/
 char	**free_split(char **s)
 {
 	int	i;
@@ -37,6 +44,9 @@ char	**free_split(char **s)
 	return (NULL);
 }
 
+/*	free_cmds
+*	Entirely frees a triple char pointer.
+*/
 void	free_cmds(char ***s)
 {
 	int	i;
@@ -52,6 +62,10 @@ void	free_cmds(char ***s)
 	return ;
 }
 
+/*	free_data
+*	Frees everything there is to free in
+*	a data structure, if allocated.
+*/
 void	free_data(t_data *data)
 {
 	if (data->cmds)
@@ -73,14 +87,18 @@ void	free_data(t_data *data)
 	return ;
 }
 
+/*	exit_error
+*	Prints two error messages, a newline 
+*	and exits the program cleanly.
+*/
 void	exit_error(t_data *data, char *msg1, char *msg2, int nl)
 {
 	if (msg1)
-		ft_putstr_fd(msg1, 2);
+		ft_putstr_fd(msg1, STDERR_FILENO);
 	if (msg2)
-		ft_putstr_fd(msg2, 2);
+		ft_putstr_fd(msg2, STDERR_FILENO);
 	if (nl)
-		ft_putchar_fd('\n', 2);
+		ft_putchar_fd('\n', STDERR_FILENO);
 	free_data(data);
 	exit(1);
 	return ;

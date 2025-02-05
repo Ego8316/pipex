@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:48:40 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 19:44:21 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 20:19:48 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static t_data	data_new(void)
 }
 
 /*	read_here_doc
-*	Reads from the standard input and writes in the
-*	.tmp file until limiter is found. If EOF is reached
+*	Duplicates standard input, reads from it and writes in the
+*	.tmp temporary file until limiter is found. If EOF is reached
 *	before finding limiter, prints bash warning. get_next_line
 *	is called afterwards with NULL pointer to empty the stash.
 */
@@ -48,6 +48,8 @@ void	read_here_doc(t_data *data, char *limiter)
 	error = 0;
 	eof = 0;
 	data->fd_stdin = dup(STDIN_FILENO);
+	if (data->fd_stdin == -1)
+		exit_error(data, "dup: ", strerror(errno), 1);
 	while (!eof)
 	{
 		ft_putstr_fd("> ", STDOUT_FILENO);
@@ -56,8 +58,7 @@ void	read_here_doc(t_data *data, char *limiter)
 			exit_error(data, "malloc: ", strerror(errno), 1);
 		if (!line)
 			eof = put_bash_warning(limiter);
-		else if (!ft_strncmp(line, limiter, ft_strlen(limiter))
-			&& ft_strlen(limiter) + 1 == ft_strlen(line))
+		else if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == '\n')
 			eof = 1;
 		else
 			ft_putstr_fd(line, data->fd_in);
@@ -65,7 +66,6 @@ void	read_here_doc(t_data *data, char *limiter)
 	}
 	get_next_line(data->fd_stdin, 0);
 	close(data->fd_stdin);
-	return ;
 }
 
 /*	get_infile

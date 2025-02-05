@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:23:34 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 14:43:24 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 20:57:16 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	envp_parsing(t_data *data)
 	i = 0;
 	while (i < data->child)
 	{
-		if (!find_path(data, i, paths))
+		if (!find_path(data, i, paths) && !(i == 0 && data->errors))
 		{
 			tmp = data->errors;
 			tmp = join_strs(tmp, (data->cmds)[i][0], ": command not found\n");

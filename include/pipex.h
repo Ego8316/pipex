@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:00:14 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 19:36:18 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 20:43:38 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #  define BUFFER_SIZE 50
 # endif
 # define FD_MAX 1024
+# define HELP1 "Usage:\t./pipex here_doc LIMITER cmd1 ... cmdn outfile\n"
+# define HELP2 "\t./pipex infile cmd1 ... cmdn outfile\n"
 
 # include <unistd.h>
 # include <sys/wait.h>
@@ -71,6 +73,7 @@ void	*ft_calloc(size_t nmemb, size_t size, int *error);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(const char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+int		put_help_message(void);
 int		put_bash_warning(const char *limiter);
 
 #endif

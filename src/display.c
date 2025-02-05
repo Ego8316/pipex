@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 23:10:59 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 19:16:34 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 21:17:02 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,18 @@ void	ft_putnbr_fd(int n, int fd)
 	return ;
 }
 
+int	put_help_message(void)
+{
+	ft_putstr_fd(HELP1, STDERR_FILENO);
+	ft_putstr_fd(HELP2, STDERR_FILENO);
+	return (1);
+}
+
 int	put_bash_warning(const char *limiter)
 {
-	ft_putstr_fd("\nbash: warning: here-document at line 1", 2);
-	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
-	ft_putstr_fd(limiter, 2);
-	ft_putstr_fd("')\n", 2);
+	ft_putstr_fd("\nbash: warning: here-document at line 1", STDOUT_FILENO);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", STDOUT_FILENO);
+	ft_putstr_fd(limiter, STDOUT_FILENO);
+	ft_putstr_fd("')\n", STDOUT_FILENO);
 	return (1);
 }

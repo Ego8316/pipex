@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:07:21 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 19:23:36 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/05 21:17:24 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ void	print_cmds(char ***cmds)
 	return ;
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
 
-	data = data_init(argc, argv, envp);
+	if (ac < 5 || (ac >= 2 && ac < 6 && !ft_strncmp("here_doc", av[1], 9)))
+		return (put_help_message());
+	data = data_init(ac, av, envp);
 	print_cmds(data.cmds);
 	free_data(&data);
 	return (0);
