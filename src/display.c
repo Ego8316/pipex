@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 23:10:59 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 21:17:02 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/06 19:37:30 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,12 @@ void	ft_putstr_fd(const char *s, int fd)
 	int	len;
 
 	len = 0;
-	while (s[len])
-		len++;
-	write(fd, s, len);
+	if (s)
+	{
+		while (s[len])
+			len++;
+		write(fd, s, len);
+	}
 	return ;
 }
 

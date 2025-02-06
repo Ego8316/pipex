@@ -6,11 +6,25 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 21:50:10 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 18:23:08 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/06 20:11:10 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+/*	ft_free
+*	Frees a char pointer only if allocated,
+*	and set it to NULL afterwards.
+*/
+int	ft_free(char **s)
+{
+	if (s && *s)
+	{
+		free(*s);
+		*s = NULL;
+	}
+	return (1);
+}
 
 static char	*ft_strndup(const char *s, size_t n, int *error)
 {

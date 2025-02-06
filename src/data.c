@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:48:40 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 20:19:48 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/06 19:49:34 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ static t_data	data_new(void)
 
 	data.cmds = NULL;
 	data.envp = NULL;
-	data.errors = NULL;
+	data.error_msg = NULL;
 	data.pids = NULL;
 	data.pipe = NULL;
-	data.child = 0;
+	data.found = NULL;
+	data.children = 0;
 	data.here_doc = 0;
 	data.fd_in = -1;
 	data.fd_out = -1;
@@ -91,14 +92,14 @@ void	get_infile(t_data *data, char *infile)
 		data->fd_in = open(infile, O_RDONLY);
 		if (data->fd_in == -1)
 		{
-			data->errors = join_strs("bash: ", infile, ": ");
-			if (!data->errors)
+			data->error_msg = join_strs("bash: ", infile, ": ");
+			if (!data->error_msg)
 				exit_error(data, "malloc: ", strerror(errno), 1);
-			tmp = join_strs(data->errors, strerror(errno), "\n");
-			free(data->errors);
+			tmp = join_strs(data->error_msg, strerror(errno), "\n");
+			free(data->error_msg);
 			if (!tmp)
 				exit_error(data, "malloc: ", strerror(errno), 1);
-			data->errors = tmp;
+			data->error_msg = tmp;
 		}
 	}
 	return ;
@@ -123,7 +124,7 @@ void	get_outfile(t_data *data, char *outfile)
 *	to get relevant information. Checks the presence of
 *	here_doc, if present gets the infile from STDIN.
 *	Splits each argument into commands and finds the
-*	the usable paths. Generates a pipe for each child
+*	the usable paths. Generates a pipe for each children
 *	interaction.
 *	Returns: the filled data structure.
 */
@@ -138,20 +139,20 @@ t_data	data_init(int argc, char **argv, char **envp)
 	get_infile(&data, argv[data.here_doc + 1]);
 	argv_parsing(&data, argc, argv);
 	data.envp = envp;
-	envp_parsing(&data);
-	data.pids = (int *)malloc(data.child * sizeof(int));
-	data.pipe = (int *)malloc(2 * (data.child - 1) * sizeof(int));
-	if (!data.pids || !data.pipe)
+	data.pids = (int *)malloc(data.children * sizeof(int));
+	data.pipe = (int *)malloc((2 * (data.children - 1)) * sizeof(int));
+	data.found = (int *)malloc(data.children * sizeof(int));
+	if (!data.pids || !data.pipe || !data.found)
 		exit_error(&data, "malloc: ", strerror(errno), 1);
+	envp_parsing(&data);
 	i = 0;
-	while (i < data.child - 1)
+	while (i < data.children - 1)
 	{
 		if (pipe(data.pipe + 2 * i) == -1)
 			exit_error(&data, "pipe: ", strerror(errno), 1);
 		i++;
 	}
 	get_outfile(&data, argv[argc - 1]);
-	if (data.errors)
-		exit_error(&data, data.errors, 0, 0);
+	ft_putstr_fd(data.error_msg, STDERR_FILENO);
 	return (data);
 }

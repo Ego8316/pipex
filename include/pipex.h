@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:00:14 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 20:43:38 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/06 19:57:26 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ typedef struct s_data
 {
 	char	***cmds;
 	char	**envp;
-	char	*errors;
+	char	*error_msg;
 	int		*pids;
 	int		*pipe;
-	int		child;
+	int		*found;
+	int		children;
 	int		here_doc;
 	int		fd_in;
 	int		fd_out;
@@ -53,6 +54,7 @@ t_data	data_init(int argc, char **argv, char **envp);
 int		ft_char_in_str(char c, char *s);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*join_strs(char *s1, char *s2, char *s3);
+int		*ft_intset(int size, int value);
 char	**ft_split(const char *s, char c);
 int		ft_strlen(const char *s);
 
@@ -61,6 +63,7 @@ int		ft_free(char **s);
 char	**free_split(char **s);
 void	free_cmds(char ***s);
 void	free_data(t_data *data);
+void	close_fds(t_data *data);
 void	exit_error(t_data *data, char *msg1, char *msg2, int nl);
 
 // get_next_line

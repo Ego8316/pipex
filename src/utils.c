@@ -6,24 +6,26 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:28:58 by ego               #+#    #+#             */
-/*   Updated: 2025/02/05 20:05:21 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/06 20:11:06 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/*	ft_free
-*	Frees a char pointer only if allocated,
-*	and set it to NULL afterwards.
+/*	close_fds
+*	Close all file descriptors in data.
 */
-int	ft_free(char **s)
+void	close_fds(t_data *data)
 {
-	if (s && *s)
-	{
-		free(*s);
-		*s = NULL;
-	}
-	return (1);
+	int	i;
+
+	if (data->fd_in > -1)
+		close(data->fd_in);
+	if (data->fd_out > -1)
+		close(data->fd_out);
+	i = -1;
+	while (++i < 2 * (data->children - 1))
+		close(data->pipe[i]);
 }
 
 /*	free_split
@@ -64,23 +66,27 @@ void	free_cmds(char ***s)
 
 /*	free_data
 *	Frees everything there is to free in
-*	a data structure, if allocated.
+*	a data structure, if allocated. Also
+*	closes all opened file descriptors.
 */
 void	free_data(t_data *data)
 {
+	close_fds(data);
 	if (data->cmds)
 		free_cmds(data->cmds);
-	if (data->errors)
-		free(data->errors);
+	if (data->error_msg)
+		free(data->error_msg);
 	if (data->pids)
 		free(data->pids);
 	if (data->pipe)
 		free(data->pipe);
-	if (data->fd_in >= 0)
+	if (data->found)
+		free(data->found);
+	if (data->fd_in > -1)
 		close(data->fd_in);
-	if (data->fd_out >= 0)
+	if (data->fd_out > -1)
 		close(data->fd_out);
-	if (data->fd_stdin >= 0)
+	if (data->fd_stdin > -1)
 		close(data->fd_stdin);
 	if (data->here_doc == 1)
 		unlink(TMP);
