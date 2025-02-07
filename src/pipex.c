@@ -6,12 +6,16 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:07:21 by ego               #+#    #+#             */
-/*   Updated: 2025/02/06 20:24:02 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/07 14:01:56 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*	redirect_io
+*	Given fd_in and fd_out, redirects them to
+*	respectively STDIN and STDOUT.
+*/
 static void	redirect_io(t_data *data, int fd_in, int fd_out)
 {
 	if (dup2(fd_in, STDIN_FILENO) == -1)
@@ -21,9 +25,17 @@ static void	redirect_io(t_data *data, int fd_in, int fd_out)
 	return ;
 }
 
+/*	child_routine
+*	If the corresponding command is a valid command,
+*	Redirects the input and output and starts execve
+*	afterwards. If the command is invalid or if it
+*	is the first command but the input file is invalid,
+*	exits the program. Prints an error message like bash
+*	in the first case.
+*/
 static void	child_routine(t_data *data, int i)
 {
-	if (data->found[i])
+	if (data->found[i] && !(i == 0 && data->fd_in == -1))
 	{
 		if (i == 0)
 			redirect_io(data, data->fd_in, data->pipe[1]);
@@ -37,12 +49,21 @@ static void	child_routine(t_data *data, int i)
 	}
 	else
 	{
+		if (!(i == 0 && data->fd_in == -1))
+		{
+			ft_putstr_fd(data->cmds[i][0], STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		}
 		free_data(data);
 		exit(127);
 	}
 	return ;
 }
 
+/*	parent_routine
+*	Waits for each children.
+*	Returns: the exit code for the last command.
+*/
 static int	parent_routine(t_data *data)
 {
 	int		i;
@@ -64,7 +85,10 @@ static int	parent_routine(t_data *data)
 }
 
 /*	pipex
-*	
+*	Forks the program for each command and calls
+*	the child routine for each child created.
+*	Calls parent routine afterwards.
+*	Returns: the exit_code given by the parent routine.
 */
 int	pipex(t_data *data)
 {
@@ -85,15 +109,32 @@ int	pipex(t_data *data)
 	return (exit_code);
 }
 
+/*	main
+*	Main functions ensures the argument given is correct.
+*	First checks if the number or arguments is correct
+*	and then checks if any argument is empty. Prints
+*	a help message if required. Otherwise initializes
+*	data and calls pipex.
+*/
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
+	int		i;
 	int		exit_code;
 
 	if (ac < 5 || (ac >= 2 && ac < 6 && !ft_strncmp("here_doc", av[1], 9)))
 		return (put_help_message());
+	i = 0;
+	while (i < ac)
+	{
+		if (!av[i][0])
+			return (put_help_message());
+		i++;
+	}
 	data = data_init(ac, av, envp);
 	exit_code = pipex(&data);
+	if (data.here_doc == 1)
+		unlink(TMP);
 	free_data(&data);
 	return (exit_code);
 }

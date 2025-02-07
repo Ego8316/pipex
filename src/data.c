@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:48:40 by ego               #+#    #+#             */
-/*   Updated: 2025/02/06 19:49:34 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/07 14:04:22 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static t_data	data_new(void)
 
 	data.cmds = NULL;
 	data.envp = NULL;
-	data.error_msg = NULL;
 	data.pids = NULL;
 	data.pipe = NULL;
 	data.found = NULL;
@@ -78,28 +77,27 @@ void	read_here_doc(t_data *data, char *limiter)
 
 void	get_infile(t_data *data, char *infile)
 {
-	char	*tmp;
-
 	if (data->here_doc)
 	{
-		data->fd_in = open(TMP, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		data->fd_in = open(TMP, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (data->fd_in == -1)
 			exit_error(data, "open: unexpected error", 0, 1);
 		read_here_doc(data, infile);
+		close(data->fd_in);
+		data->fd_in = open(TMP, O_RDONLY);
+		if (data->fd_in == -1)
+			exit_error(data, "open: unexpected error", 0, 1);
 	}
 	else
 	{
 		data->fd_in = open(infile, O_RDONLY);
 		if (data->fd_in == -1)
 		{
-			data->error_msg = join_strs("bash: ", infile, ": ");
-			if (!data->error_msg)
-				exit_error(data, "malloc: ", strerror(errno), 1);
-			tmp = join_strs(data->error_msg, strerror(errno), "\n");
-			free(data->error_msg);
-			if (!tmp)
-				exit_error(data, "malloc: ", strerror(errno), 1);
-			data->error_msg = tmp;
+			ft_putstr_fd("bash: ", STDERR_FILENO);
+			ft_putstr_fd(infile, STDERR_FILENO);
+			ft_putstr_fd(": ", STDERR_FILENO);
+			ft_putstr_fd(strerror(errno), STDERR_FILENO);
+			ft_putchar_fd('\n', STDERR_FILENO);
 		}
 	}
 	return ;
@@ -153,6 +151,5 @@ t_data	data_init(int argc, char **argv, char **envp)
 		i++;
 	}
 	get_outfile(&data, argv[argc - 1]);
-	ft_putstr_fd(data.error_msg, STDERR_FILENO);
 	return (data);
 }

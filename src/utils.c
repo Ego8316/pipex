@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:28:58 by ego               #+#    #+#             */
-/*   Updated: 2025/02/06 20:11:06 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/07 14:01:46 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ void	free_data(t_data *data)
 	close_fds(data);
 	if (data->cmds)
 		free_cmds(data->cmds);
-	if (data->error_msg)
-		free(data->error_msg);
 	if (data->pids)
 		free(data->pids);
 	if (data->pipe)
@@ -88,8 +86,6 @@ void	free_data(t_data *data)
 		close(data->fd_out);
 	if (data->fd_stdin > -1)
 		close(data->fd_stdin);
-	if (data->here_doc == 1)
-		unlink(TMP);
 	return ;
 }
 

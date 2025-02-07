@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:23:34 by ego               #+#    #+#             */
-/*   Updated: 2025/02/06 20:11:55 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/07 13:25:29 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ static int	find_path(t_data *data, int child, char **paths)
 void	envp_parsing(t_data *data)
 {
 	char	**paths;
-	char	*tmp;
 	int		i;
 
 	i = 0;
@@ -89,17 +88,6 @@ void	envp_parsing(t_data *data)
 		exit_error(data, "malloc: ", strerror(errno), 1);
 	i = -1;
 	while (++i < data->children)
-	{
 		data->found[i] = find_path(data, i, paths);
-		if (!data->found[i] && !(i == 0 && data->error_msg))
-		{
-			tmp = data->error_msg;
-			tmp = join_strs(tmp, data->cmds[i][0], ": command not found\n");
-			free(data->error_msg);
-			if (!tmp)
-				exit_error(data, "malloc: ", strerror(errno), 1);
-			data->error_msg = tmp;
-		}
-	}
 	free_split(paths);
 }

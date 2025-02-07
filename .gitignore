@@ -8,6 +8,6 @@ outfile
 infile
 .tmp
 a
-42_pipex_tester
+42_pipex_tester/infiles/*
 .vscode
 pipex-tester
