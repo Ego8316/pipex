@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/15 12:42:34 by hcavet            #+#    #+#              #
-#    Updated: 2025/02/11 18:25:04 by ego              ###   ########.fr        #
+#    Updated: 2025/02/11 18:25:56 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ norm	:
 
 clean	:
 			echo "Removing object files..."
-			$(RM) $(OBJS) $(LOG)
+			$(RM) $(OBJS)
 			echo "$(ORANGE)[OK] All object files have been removed.$(RESET)"
 
 fclean	:	clean
