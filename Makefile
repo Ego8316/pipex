@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/15 12:42:34 by hcavet            #+#    #+#              #
-#    Updated: 2025/02/07 14:25:36 by ego              ###   ########.fr        #
+#    Updated: 2025/02/11 18:25:04 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,7 @@ clean	:
 
 fclean	:	clean
 			echo "Removing binary files..."
-			$(RM) $(NAME) $(BNAME)
+			$(RM) $(NAME)
 			echo "$(ORANGE)[OK] All binary files have been removed.$(RESET)"
 
 re		:	fclean all
