@@ -6,12 +6,22 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 23:09:41 by ego               #+#    #+#             */
-/*   Updated: 2025/02/07 13:27:47 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/11 20:20:48 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/**
+ * @brief Compares the first n bytes of the two strings s1 and s2.
+ * 
+ * @param s1 Pointer to the first string.
+ * @param s2 Pointer to the second string.
+ * @param n The number of bytes to compare.
+ * 
+ * @return - 0 if the first n bytes of both strings are equal,
+ * a signed value otherwise.
+ */
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	int		diff;
@@ -28,6 +38,14 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
+/**
+ * @brief Duplicates a given string.
+ * 
+ * @param s String to duplicate.
+ * @param error Set to 1 if the allocation fails.
+ * 
+ * @return Duplicated string. NULL if the allocation fails.
+ */
 char	*ft_strdup(const char *s, int *error)
 {
 	char	*dup;
@@ -50,6 +68,17 @@ char	*ft_strdup(const char *s, int *error)
 	return (dup);
 }
 
+/**
+ * @brief Allocates and returns a new string, which is the result
+ * of the concatenation of s1 and s2. If the first one is empty,
+ * only duplicates the second one.
+ * 
+ * @param s1 The prefix string.
+ * @param s2 The suffix string.
+ * @param error Set to 1 if the allocation fails.
+ * 
+ * @return The new string. NULL if the allocation fails.
+ */
 char	*ft_strjoin(const char *s1, const char *s2, int *error)
 {
 	size_t	i;
@@ -76,6 +105,16 @@ char	*ft_strjoin(const char *s1, const char *s2, int *error)
 	return (join);
 }
 
+/**
+ * @brief Allocates and returns a new string, which is the
+ * result of the concatenation of s1, s2 and s3.
+ * 
+ * @param s1 First string.
+ * @param s2 Second string.
+ * @param s3 Third string.
+ * 
+ * @return The new string. NULL if the allocation fails.
+ */
 char	*join_strs(char *s1, char *s2, char *s3)
 {
 	char	*join;

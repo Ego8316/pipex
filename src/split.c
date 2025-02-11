@@ -6,12 +6,21 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 23:13:19 by ego               #+#    #+#             */
-/*   Updated: 2025/02/04 19:47:44 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/11 20:07:24 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/**
+ * @brief Counts the number of "words" delimited by the given
+ * character in the given string.
+ * 
+ * @param s String to parse.
+ * @param c Delimiter.
+ * 
+ * @return Number of words.
+ */
 static size_t	ft_split_count_words(const char *s, char c)
 {
 	size_t	i;
@@ -35,6 +44,14 @@ static size_t	ft_split_count_words(const char *s, char c)
 	return (nb_words);
 }
 
+/**
+ * @brief Duplicates a given string up to n first characters.
+ * 
+ * @param s String to duplicate.
+ * @param n Number of characters wanted.
+ * 
+ * @return Duplicated string. NULL if allocation failed or n is zero.
+ */
 static char	*ft_strndup(const char *s, size_t n)
 {
 	char	*ndup;
@@ -55,6 +72,14 @@ static char	*ft_strndup(const char *s, size_t n)
 	return (ndup);
 }
 
+/**
+ * @brief Gets the next word length.
+ * 
+ * @param s String to parse. Pointer should start at a word.
+ * @param c Delimiter.
+ * 
+ * @return Word length.
+ */
 static size_t	ft_split_get_word_len(const char *s, char c)
 {
 	size_t	word_len;
@@ -68,6 +93,17 @@ static size_t	ft_split_get_word_len(const char *s, char c)
 	return (word_len);
 }
 
+/**
+ * @brief Allocates and returns an array of strings obtained by
+ * splitting the string s using the character c as a delimiter.
+ * The array ends with a NULL pointer.
+ * 
+ * @param s The string to be split.
+ * @param c The delimiter character.
+ * 
+ * @return The array of new strings resulting from the split.
+ * NULL if the allocation fails.
+ */
 char	**ft_split(const char *s, char c)
 {
 	char	**split;

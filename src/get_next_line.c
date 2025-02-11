@@ -6,16 +6,20 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 21:50:10 by ego               #+#    #+#             */
-/*   Updated: 2025/02/06 20:11:10 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/11 20:25:19 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/*	ft_free
-*	Frees a char pointer only if allocated,
-*	and set it to NULL afterwards.
-*/
+/**
+ * @brief Frees the pointed string only if allocated
+ * and set it to NULL afterwards.
+ * 
+ * @param s Pointer to a string.
+ * 
+ * @return 1.
+ */
 int	ft_free(char **s)
 {
 	if (s && *s)
@@ -26,6 +30,15 @@ int	ft_free(char **s)
 	return (1);
 }
 
+/**
+ * @brief Duplicates a given string up to n first characters.
+ * 
+ * @param s String to duplicate.
+ * @param n Number of characters wanted.
+ * @param error Set to 1 if the allocation fails.
+ * 
+ * @return Duplicated string. NULL if the allocation fails or n is zero.
+ */
 static char	*ft_strndup(const char *s, size_t n, int *error)
 {
 	char	*ndup;
@@ -45,6 +58,16 @@ static char	*ft_strndup(const char *s, size_t n, int *error)
 	return (ndup);
 }
 
+/**
+ * @brief Reads from given file descriptor and appends content
+ * to the stash until finding a newline.
+ * 
+ * @param fd File descriptor.
+ * @param stash Pointer to the stash.
+ * @param error Set to 1 if an allocation fails.
+ * 
+ * @return 0 if an error occurs, 1 otherwise.
+ */
 static int	ft_get_to_next_nl(int fd, char **stash, int *error)
 {
 	char		*buf;
@@ -72,6 +95,16 @@ static int	ft_get_to_next_nl(int fd, char **stash, int *error)
 	return (ft_free(&buf));
 }
 
+/**
+ * @brief Parses the stash to give the part before newline
+ * and keep in the stash only what is after.
+ * 
+ * @param stash Pointer to the stash.
+ * @param error Set to 1 if an allocation fails.
+ * 
+ * @return Allocated string containing what is before newline.
+ * NULL if an error occured or if the content is empty.
+ */
 static char	*ft_split_content(char **stash, int *error)
 {
 	char	*temp;
@@ -100,12 +133,16 @@ static char	*ft_split_content(char **stash, int *error)
 	return (line);
 }
 
-/*	get_next_line
-*	Finds the next line given a file descriptor.
-*	Allocation error is stocked in error.
-*	If no error pointer is given, frees the stash.
-*	Returns: the next line.
-*/
+/**
+ * @brief Gives the next line in an opened file descriptor.
+ * Can be called with NULL pointer to free the stash.
+ * 
+ * @param fd File descriptor.
+ * @param fd Set to 1 if an allocation fails.
+ * 
+ * @return The next line. NULL if end of file has been
+ * reached or if an error occured.
+ */
 char	*get_next_line(int fd, int *error)
 {
 	static char	*stash[FD_MAX];

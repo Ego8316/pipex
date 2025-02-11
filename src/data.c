@@ -6,16 +6,17 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:48:40 by ego               #+#    #+#             */
-/*   Updated: 2025/02/07 14:04:22 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/11 19:33:13 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/*	data_new
-*	Initializes a data structure.
-*	Returns: the empty data structure.
-*/
+/**
+ * @brief Initializes an empty data structure.
+ * 
+ * @return The new data structure.
+ */
 static t_data	data_new(void)
 {
 	t_data	data;
@@ -33,12 +34,12 @@ static t_data	data_new(void)
 	return (data);
 }
 
-/*	read_here_doc
-*	Duplicates standard input, reads from it and writes in the
-*	.tmp temporary file until limiter is found. If EOF is reached
-*	before finding limiter, prints bash warning. get_next_line
-*	is called afterwards with NULL pointer to empty the stash.
-*/
+/**
+ * @brief Duplicates standard input, reads from it and writes in the
+ * .tmp temporary file until limiter is found. If EOF is reached
+ * before finding limiter, prints bash warning. get_next_line
+ * is called afterwards with NULL pointer to empty the stash.
+ */
 void	read_here_doc(t_data *data, char *limiter)
 {
 	int		error;
@@ -68,13 +69,14 @@ void	read_here_doc(t_data *data, char *limiter)
 	close(data->fd_stdin);
 }
 
-/*	get_infile
-*	If here_doc present: infile actually is the limiter.
-*	Creates a temporary file and calls read_here_doc
-*	to fill the file like a regular one.
-*	Otherwise, tries to open infile.
-*/
-
+/**
+ * @brief Opens infile. If here_doc is present, infile actually
+ * is the limiter. In that case, creates a temporary file and
+ * calls read_here_doc to fill the file just like a regular one.
+ * 
+ * @param data Pointer to the data structure.
+ * @param infile Name of the input file.
+ */
 void	get_infile(t_data *data, char *infile)
 {
 	if (data->here_doc)
@@ -103,10 +105,13 @@ void	get_infile(t_data *data, char *infile)
 	return ;
 }
 
-/*	get_outfile
-*	If here_doc is present, opens outfile in append mode,
-*	truncate mode otherwise.
-*/
+/**
+ * @brief If here_doc is present, opens outfile in append mode,
+ * truncate mode otherwise.
+ * 
+ * @param data Pointer to the data structure.
+ * @param outfile Name of the output file.
+ */
 void	get_outfile(t_data *data, char *outfile)
 {
 	if (data->here_doc)
@@ -117,15 +122,19 @@ void	get_outfile(t_data *data, char *outfile)
 		exit_error(data, "open: unexpected error", 0, 1);
 }
 
-/*	data_init
-*	Initializes a data structure and parses the argument
-*	to get relevant information. Checks the presence of
-*	here_doc, if present gets the infile from STDIN.
-*	Splits each argument into commands and finds the
-*	the usable paths. Generates a pipe for each children
-*	interaction.
-*	Returns: the filled data structure.
-*/
+/**
+ * @brief Initializes a data structure and parses the
+ * argument to get relevant information. Checks the
+ * presence of here_doc. Parses each command and finds
+ * usable paths. Generates a pipe for each children
+ * interaction. Gets the input and output files.
+ * 
+ * @param argc Number of arguments.
+ * @param argv Array of arguments.
+ * @param envp Environment.
+ * 
+ * @return Filled data structure.
+ */
 t_data	data_init(int argc, char **argv, char **envp)
 {
 	t_data	data;

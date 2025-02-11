@@ -6,16 +6,21 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:07:21 by ego               #+#    #+#             */
-/*   Updated: 2025/02/07 14:01:56 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/11 19:59:13 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/*	redirect_io
-*	Given fd_in and fd_out, redirects them to
-*	respectively STDIN and STDOUT.
-*/
+/**
+ * @brief Redirects the standard input to the provided input file
+ * descriptor and standard output to the provided output file descriptor
+ * using dup2. If dup2 fails, exits the program cleanly.
+ * 
+ * @param data Pointer to the data structure.
+ * @param fd_in Input file descriptor to be used as new STDIN.
+ * @param fd_out Output file descriptor to be used as new STDOUT.
+ */
 static void	redirect_io(t_data *data, int fd_in, int fd_out)
 {
 	if (dup2(fd_in, STDIN_FILENO) == -1)
@@ -25,14 +30,16 @@ static void	redirect_io(t_data *data, int fd_in, int fd_out)
 	return ;
 }
 
-/*	child_routine
-*	If the corresponding command is a valid command,
-*	Redirects the input and output and starts execve
-*	afterwards. If the command is invalid or if it
-*	is the first command but the input file is invalid,
-*	exits the program. Prints an error message like bash
-*	in the first case.
-*/
+/**
+ * @brief If the corresponding command is a valid command,
+ * redirects standard input and output, closes unused file
+ * descriptors and starts exceve. If the command is invalid
+ * or if it is the first command but the input file is invalid,
+ * exits the child process and prints an error message like bash.
+ * 
+ * @param data Pointer to the data structure.
+ * @param i Child/command index.
+ */
 static void	child_routine(t_data *data, int i)
 {
 	if (data->found[i] && !(i == 0 && data->fd_in == -1))
@@ -60,10 +67,13 @@ static void	child_routine(t_data *data, int i)
 	return ;
 }
 
-/*	parent_routine
-*	Waits for each children.
-*	Returns: the exit code for the last command.
-*/
+/**
+ * @brief Waits for each child routine to end.
+ * 
+ * @param data Pointer to the data structure.
+ * 
+ * @return Exit code of the last child.
+ */
 static int	parent_routine(t_data *data)
 {
 	int		i;
@@ -84,12 +94,14 @@ static int	parent_routine(t_data *data)
 	return (exit_code);
 }
 
-/*	pipex
-*	Forks the program for each command and calls
-*	the child routine for each child created.
-*	Calls parent routine afterwards.
-*	Returns: the exit_code given by the parent routine.
-*/
+/**
+ * Forks the program for each command and calls
+ * the child routine for each child  created.
+ * 
+ * @param data Pointer to the data structure.
+ * 
+ * @return Exit code of the last command.
+ */
 int	pipex(t_data *data)
 {
 	int	i;
@@ -109,13 +121,11 @@ int	pipex(t_data *data)
 	return (exit_code);
 }
 
-/*	main
-*	Main functions ensures the argument given is correct.
-*	First checks if the number or arguments is correct
-*	and then checks if any argument is empty. Prints
-*	a help message if required. Otherwise initializes
-*	data and calls pipex.
-*/
+/**
+ * Ensures the argument given is formatted correctly.
+ * Prints a help message if required. Otherwise
+ * initializes data and calls pipex.
+ */
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;

@@ -6,15 +6,17 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:28:58 by ego               #+#    #+#             */
-/*   Updated: 2025/02/07 14:01:46 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/11 20:24:51 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/*	close_fds
-*	Close all file descriptors in data.
-*/
+/**
+ * @brief Close all file descriptors in data.
+ * 
+ * @param data Pointer to the data structure.
+ */
 void	close_fds(t_data *data)
 {
 	int	i;
@@ -28,9 +30,13 @@ void	close_fds(t_data *data)
 		close(data->pipe[i]);
 }
 
-/*	free_split
-*	Entirely frees a double char pointer.
-*/
+/**
+ * @brief Entirely frees an array of strings.
+ * 
+ * @param s The array to be freed.
+ * 
+ * @return NULL.
+ */
 char	**free_split(char **s)
 {
 	int	i;
@@ -46,9 +52,11 @@ char	**free_split(char **s)
 	return (NULL);
 }
 
-/*	free_cmds
-*	Entirely frees a triple char pointer.
-*/
+/**
+ * @brief Entirely frees an array of arrays of strings.
+ * 
+ * @param s The array to be freed.
+ */
 void	free_cmds(char ***s)
 {
 	int	i;
@@ -64,11 +72,13 @@ void	free_cmds(char ***s)
 	return ;
 }
 
-/*	free_data
-*	Frees everything there is to free in
-*	a data structure, if allocated. Also
-*	closes all opened file descriptors.
-*/
+/**
+ * @brief Frees everything there is to free in
+ * a data structure, if allocated. Also closes
+ * all opened file descriptors.
+ * 
+ * @param data Pointer to the data structure.
+ */
 void	free_data(t_data *data)
 {
 	close_fds(data);
@@ -89,10 +99,15 @@ void	free_data(t_data *data)
 	return ;
 }
 
-/*	exit_error
-*	Prints two error messages, a newline 
-*	and exits the program cleanly.
-*/
+/**
+ * @brief Prints two error messages and optionnally a newline.
+ * Exits the program cleanly afterwards with code 1.
+ * 
+ * @param data Pointer to the data structure.
+ * @param msg1 First message to be printed.
+ * @param msg2 Second printed to be printed.
+ * @param nl 1 if newline wanted, 0 otherwise.
+ */
 void	exit_error(t_data *data, char *msg1, char *msg2, int nl)
 {
 	if (msg1)

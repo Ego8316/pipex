@@ -6,15 +6,19 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:23:34 by ego               #+#    #+#             */
-/*   Updated: 2025/02/07 13:25:29 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/11 19:50:21 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/*	argv_parsing
-*	Parses the argument to get the command names and options.
-*/
+/**
+ * @brief Parses the argument to get the commands' names and options.
+ * 
+ * @param data Pointer to the data structure.
+ * @param argc Number of arguments.
+ * @param argv Array of arguments.
+ */
 void	argv_parsing(t_data *data, int argc, char **argv)
 {
 	int	i;
@@ -34,13 +38,17 @@ void	argv_parsing(t_data *data, int argc, char **argv)
 	data->cmds[i - 2 - data->here_doc] = NULL;
 }
 
-/*	find_path
-*	Given the data structure, the children index and the paths,
-*	search through the latter to see if the command can be
-*	found in one of them. If so, changes the data structure
-*	accordingly.
-*	Returns: 1 if the command has been found, 0 otherwise.
-*/
+/**
+ * @brief Searches through the paths to find a usable path
+ * for the command of the corresponding child index. Updates
+ * the data structure accordingly.
+ * 
+ * @param data Pointer to the data structure.
+ * @param child Child/command index.
+ * @param paths All paths found.
+ * 
+ * @return 1 if a usable path has been found, 0 otherwise.
+ */
 static int	find_path(t_data *data, int child, char **paths)
 {
 	int		i;
@@ -69,12 +77,14 @@ static int	find_path(t_data *data, int child, char **paths)
 	return (0);
 }
 
-/*	envp_parsing
-*	Goes through the envp to find the PATH= line
-*	and splits that line to get the different paths.
-*	Afterwards, checks for each command if it exists
-*	and exits the program if it does not.
-*/
+/**
+ * @brief Goes through the environment variable to find
+ * the PATH= line and splits that line to get the different
+ * paths and then checks for each command if it exists.
+ * Sets found value to 1 if so, 0 otherwise.
+ * 
+ * @param data Pointer to the data structure.
+ */
 void	envp_parsing(t_data *data)
 {
 	char	**paths;
