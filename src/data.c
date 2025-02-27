@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hcavet <hcavet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:48:40 by ego               #+#    #+#             */
-/*   Updated: 2025/02/11 19:33:13 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/27 12:16:40 by hcavet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,13 @@ void	get_outfile(t_data *data, char *outfile)
 	else
 		data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (data->fd_out == -1)
-		exit_error(data, "open: unexpected error", 0, 1);
+	{
+		ft_putstr_fd("bash: ", STDERR_FILENO);
+		ft_putstr_fd(outfile, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
+	}
 }
 
 /**

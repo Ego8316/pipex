@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hcavet <hcavet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:07:21 by ego               #+#    #+#             */
-/*   Updated: 2025/02/11 19:59:13 by ego              ###   ########.fr       */
+/*   Updated: 2025/02/27 12:26:17 by hcavet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 static void	redirect_io(t_data *data, int fd_in, int fd_out)
 {
 	if (dup2(fd_in, STDIN_FILENO) == -1)
-		exit_error(data, "dup2: ", strerror(errno), 1);
+		exit_error(data, 0, 0, 0);
 	if (dup2(fd_out, STDOUT_FILENO) == -1)
-		exit_error(data, "dup2: ", strerror(errno), 1);
+		exit_error(data, 0, 0, 0);
 	return ;
 }
 
